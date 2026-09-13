@@ -1,0 +1,1 @@
+sed -i 's/Tu dois adapter ton langage selon le niveau de preuve (Evidence Level) :/Tu dois adapter ton langage selon le niveau de preuve (Evidence Level). NE COPIE JAMAIS LES MOTS-CLÉS EN MAJUSCULE COMME "EXPLICIT_TEXT" DANS TA RÉPONSE FINALE, applique simplement le style de langage :/g' src/server/instructions/systemPrompt.ts

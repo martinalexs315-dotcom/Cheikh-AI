@@ -1,0 +1,8 @@
+{
+  "name": "Cheikh IA",
+  "description": "Un assistant virtuel islamique basé sur l'IA, conçu pour répondre avec humilité, précision et sources.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
