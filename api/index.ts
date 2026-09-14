@@ -1,4 +1,4 @@
-import { app, startServer } from '../server';
+import { app, startServer } from '../server.ts';
 import { Request, Response } from 'express';
 
 let initialized = false;
