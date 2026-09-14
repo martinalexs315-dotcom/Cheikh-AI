@@ -22,7 +22,9 @@ dotenv.config();
 
 const anonymousUsage = new Map<string, number>();
 
-async function startServer() {
+export  
+const app = express();
+export async function startServer() {
   
   if (getApps().length === 0) {
     if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
@@ -50,7 +52,7 @@ async function startServer() {
     }
   }
 
-  const app = express();
+   
   const PORT = 3000;
 
   app.use(cors());
@@ -503,7 +505,11 @@ Aucune source documentaire n'a été récupérée. Répondez avec prudence et hu
     app.get('*', (req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
 
-  app.listen(PORT, "0.0.0.0", () => console.log(`Server running on http://0.0.0.0:${PORT}`));
+  if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) { app.listen(PORT, "0.0.0.0", () => console.log(`Server running on http://0.0.0.0:${PORT}`)); }
 }
 
-startServer();
+
+
+if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
+  startServer();
+}
