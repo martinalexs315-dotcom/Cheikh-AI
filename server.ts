@@ -30,7 +30,7 @@ async function startServer() {
         const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
         initializeApp({
           credential: cert(serviceAccount),
-          projectId: firebaseConfig.projectId
+          projectId: process.env.FIREBASE_PROJECT_ID || firebaseConfig.projectId
         });
         console.log("Firebase Admin initialized with service account key");
       } catch (e) {
@@ -41,7 +41,7 @@ async function startServer() {
     if (getApps().length === 0) {
       try {
         initializeApp({
-          projectId: firebaseConfig.projectId
+          projectId: process.env.FIREBASE_PROJECT_ID || firebaseConfig.projectId
         });
         console.log("Firebase Admin initialized with projectId:", firebaseConfig.projectId);
       } catch (e) {

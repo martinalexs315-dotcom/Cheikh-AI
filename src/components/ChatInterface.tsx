@@ -316,7 +316,17 @@ export default function ChatInterface() {
     if (user && activeConversationId) {
       console.log("[Firestore DEBUG] operation: onSnapshot, collection: messages, auth state: authenticated, uid:", user.uid);
       const unsubscribe = subscribeToMessages(user.uid, activeConversationId, (msgs) => {
-        if (isMounted) setActiveMessages(msgs);
+        if (isMounted) {
+          setActiveMessages(prev => {
+            // Empêche le clignotement (flicker) de l'interface lors d'une nouvelle discussion.
+            // Si on a déjà un message optimiste local mais que Firestore renvoie un tableau vide
+            // à cause du délai de création, on préserve l'état local pour ne pas revenir à l'écran d'accueil.
+            if (msgs.length === 0 && prev.length > 0) {
+              return prev;
+            }
+            return msgs;
+          });
+        }
       });
       return () => {
         isMounted = false;
@@ -631,12 +641,13 @@ export default function ChatInterface() {
     
     updateConversation(targetConvId, newHistory);
     
+    let userMessageSavePromise = Promise.resolve<any>(null);
     if (user) {
       const convIdToSave = targetConvId;
       // Wait for conversation to be created if it's new, then save message
-      convCreationPromise.then(() => {
-        saveMessageToFirestore(convIdToSave, user.uid, userMessage).catch(console.error);
-      }).catch(console.error);
+      userMessageSavePromise = convCreationPromise.then(() => {
+        return saveMessageToFirestore(convIdToSave, user.uid, userMessage);
+      }).catch(console.error) as any;
     }
 
     if (abortControllerRef.current) {
@@ -728,7 +739,9 @@ export default function ChatInterface() {
                    setActiveMessages(updated);
                    updateConversation(targetConvId!, updated);
                    if (user) {
-                     saveMessageToFirestore(targetConvId!, user.uid, finalMsg).catch(console.error);
+                     userMessageSavePromise.then(() => {
+                       saveMessageToFirestore(targetConvId!, user.uid, finalMsg).catch(console.error);
+                     });
                    }
                    continue; // Go to next line
                  }
@@ -759,7 +772,9 @@ export default function ChatInterface() {
       // Save assistant message to Firestore if connected
       if (user && modelMessageContent) {
          const finalMsg: ChatMessage = { role: 'model', content: modelMessageContent, createdAt: Date.now() };
-         saveMessageToFirestore(targetConvId!, user.uid, finalMsg).catch(console.error);
+         userMessageSavePromise.then(() => {
+           saveMessageToFirestore(targetConvId!, user.uid, finalMsg).catch(console.error);
+         });
       }
       
     } catch (err: any) {
@@ -778,7 +793,9 @@ export default function ChatInterface() {
       updateConversation(targetConvId!, updated);
       
       if (user) {
-         saveMessageToFirestore(targetConvId!, user.uid, errorMessage).catch(console.error);
+         userMessageSavePromise.then(() => {
+           saveMessageToFirestore(targetConvId!, user.uid, errorMessage).catch(console.error);
+         });
       }
     } finally {
       if (abortControllerRef.current === abortController) {

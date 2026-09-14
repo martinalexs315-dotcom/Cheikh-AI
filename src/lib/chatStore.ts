@@ -1,4 +1,4 @@
-import { collection, doc, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs } from 'firebase/firestore';
+import { collection, doc, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp, writeBatch, getDocs, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { ChatMessage, Conversation } from '../shared/types';
 import { handleFirestoreError } from './firebase'; // Optional if you need custom error handling, but we can just use try-catch

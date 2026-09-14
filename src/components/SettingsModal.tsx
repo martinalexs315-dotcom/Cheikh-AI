@@ -19,7 +19,7 @@ interface SettingsModalProps {
   onClearActiveChat?: () => void;
 }
 
-type TabId = 'appearance' | 'chat' | 'reading' | 'data' | 'security' | 'about';
+type TabId = 'appearance' | 'reading' | 'data' | 'security' | 'about';
 
 export default function SettingsModal({
   isOpen,
@@ -41,7 +41,6 @@ export default function SettingsModal({
 
   const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
     { id: 'appearance', label: 'Apparence', icon: Sun },
-    { id: 'chat', label: 'Chat & Navigation', icon: MessageSquare },
     { id: 'reading', label: 'Réponses & Sources', icon: BookOpen },
     { id: 'data', label: 'Données & Confidentialité', icon: Database },
     { id: 'security', label: 'Sécurité & Compte', icon: Shield },
@@ -228,83 +227,6 @@ export default function SettingsModal({
                   className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
                 />
               </label>
-            </div>
-          </div>
-        );
-
-      case 'chat':
-        return (
-          <div className="space-y-6">
-            <div>
-              <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Comportement de saisie</h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">Définissez la manière dont vous envoyez vos questions à l'IA.</p>
-              
-              <div className="space-y-2">
-                <label className="flex items-start gap-3 p-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                  <input
-                    type="radio"
-                    name="enterToSend"
-                    checked={settings.enterToSend === true}
-                    onChange={() => updateSettings({ enterToSend: true })}
-                    className="mt-1 w-4 h-4 text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <div>
-                    <span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100">Appuyer sur Entrée pour envoyer</span>
-                    <span className="block text-xs text-zinc-500 dark:text-zinc-400">Envoi immédiat avec la touche Entrée. Utilisez Maj + Entrée pour sauter une ligne.</span>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 p-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                  <input
-                    type="radio"
-                    name="enterToSend"
-                    checked={settings.enterToSend === false}
-                    onChange={() => updateSettings({ enterToSend: false })}
-                    className="mt-1 w-4 h-4 text-emerald-600 focus:ring-emerald-500"
-                  />
-                  <div>
-                    <span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100">Bouton d'envoi uniquement</span>
-                    <span className="block text-xs text-zinc-500 dark:text-zinc-400">La touche Entrée crée un saut de ligne. Idéal pour rédiger de longues questions sans envoi prématuré.</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            {/* Auto scroll & Quick copy */}
-            <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
-              <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Options de navigation</h4>
-              
-              <label className="flex items-center justify-between p-3 border border-zinc-200 dark:border-zinc-800 rounded-xl cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                <div>
-                  <span className="block text-sm font-medium text-zinc-900 dark:text-zinc-100">Défilement automatique fluide</span>
-                  <span className="block text-xs text-zinc-500 dark:text-zinc-400">Fait descendre automatiquement l'écran au fur et à mesure que l'IA répond.</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={settings.autoScroll}
-                  onChange={(e) => updateSettings({ autoScroll: e.target.checked })}
-                  className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
-                />
-              </label>
-            </div>
-
-            {/* Keyboard Shortcuts Cheatsheet */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-900/60 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">Raccourcis Clavier</h4>
-              <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-600 dark:text-zinc-300">Envoyer le message</span>
-                  <kbd className="px-2 py-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded shadow-xs font-mono font-medium">Entrée</kbd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-600 dark:text-zinc-300">Nouvelle ligne dans le texte</span>
-                  <kbd className="px-2 py-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded shadow-xs font-mono font-medium">Maj + Entrée</kbd>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-zinc-600 dark:text-zinc-300">Fermer une modale / Annuler</span>
-                  <kbd className="px-2 py-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded shadow-xs font-mono font-medium">Échap</kbd>
-                </div>
-              </div>
             </div>
           </div>
         );
