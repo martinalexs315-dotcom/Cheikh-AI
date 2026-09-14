@@ -6,14 +6,14 @@
       "use": "@vercel/vite"
     },
     {
-      "src": "server.ts",
+      "src": "api/server.js",
       "use": "@vercel/node"
     }
   ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/server.ts"
+      "destination": "/api/server.js"
     },
     {
       "source": "/(.*)",
